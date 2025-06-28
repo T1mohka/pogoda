@@ -1,0 +1,413 @@
+/* === RESET === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* === BODY & BACKGROUND === */
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh; /* щоб завжди займати всю висоту екрана */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed; /* щоб фон був закріплений */
+  background-color: #1e1e1e; /* запасний колір, якщо картинка не завантажилась */
+}
+
+/* === WEATHER BACKGROUNDS === */
+.sun {
+  background-image: url(images/sun.jpg);
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
+}
+
+.cloud {
+  background-image: url(images/cloud.jpg);
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(2px);
+}
+
+.rain {
+  background-image: url(images/rain.jpg);
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(2px);
+}
+
+.snow {
+  background-image: url(images/snow.jpg);
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(2px);
+}
+
+/* === HEADER === */
+header {
+  background-color: #d4b49c;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* === NAVIGATION === */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  position: relative;
+  align-items: flex-start;
+}
+
+.nav-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-right: 1rem;
+}
+
+nav button,
+nav input,
+#searchBtn,
+.nav-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #3e2b23;
+  font-size: 1rem;
+  cursor: pointer;
+  height: 48px;
+}
+
+
+
+
+.search-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+#searchInput {
+  border: 1px solid #bca38c;
+  border-radius: 10px;
+  width: 350px;
+  height: 48px;
+  font-size: 1.1rem;
+  padding: 0 1rem;
+}
+
+#searchBtn {
+  width: 150px;
+}
+
+/* === CITY SUGGESTIONS === */
+.city-suggestions {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.city-suggestions.show {
+  display: block;
+}
+
+.city-suggestions div {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.city-suggestions div:hover {
+  background-color: #eee;
+}
+
+/* === MAIN BLOCK === */
+main {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.current-weather {
+  background-color: #fff7f1;
+  border-radius: 20px;
+  padding: 1rem;
+  max-width: 1300px;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.weather-info img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 0.5rem;
+}
+
+.weather-info p {
+  margin: 0.5rem 0;
+  font-size: 1.2rem;
+}
+
+#cityName {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+#forecastContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* центр по горизонталі */
+  gap: 10px;
+  margin-top: 0;
+  padding: 0;
+}
+
+/* === HOURLY FORECAST (SCROLLABLE) === */
+.hourly-scroll {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  gap: 12px;
+  padding: 10px;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  margin-top: 20px;
+  max-width: 100%;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.hourly-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.hour-block {
+  min-width: 64px;
+  max-width: 64px;
+  flex-shrink: 0;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 8px 4px;
+  text-align: center;
+  color: white;
+  font-size: 13px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.hour-block img {
+  width: 40px;
+  height: 40px;
+  margin: 5px 0;
+}/* === HOURLY FORECAST (SCROLLABLE) === */
+.hourly-scroll {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  gap: 12px;
+  padding: 10px;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  margin-top: 20px;
+  max-width: 100%;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.hourly-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.hour-block {
+  min-width: 70px;
+  max-width: 70px;
+  flex-shrink: 0;
+  background-color: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 8px 4px;
+  text-align: center;
+  color: black;
+  font-size: 13px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+.hour-block img {
+  width: 40px;
+  height: 40px;
+  margin: 5px 0;
+}
+
+
+
+.hourly-scroll {
+  overflow-x: auto;
+  scrollbar-width: thin;           /* Firefox */
+  scrollbar-color: #b99b84 #fff0e5; /* Firefox */
+}
+
+.hourly-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.hourly-scroll::-webkit-scrollbar-track {
+  background: #fff0e5;
+  border-radius: 8px;
+}
+
+.hourly-scroll::-webkit-scrollbar-thumb {
+  background-color: #b99b84;
+  border-radius: 8px;
+  border: 2px solid #fff0e5;
+}
+
+
+/* === CONDITION TEXT === */
+#conditionText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.forecast-day-block {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 3px;
+  margin: 5px;
+  width: 100%;
+ max-width: 900px;
+  min-height: 100px; /* трохи менша висота */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease;
+}
+
+.forecast-day-block img {
+  display: block;
+  margin: 0 auto 5px;
+  width: 48px;
+  height: 48px;
+}
+
+
+
+.forecast-day-block:hover {
+  transform: scale(1.03);
+}
+
+#Weather {
+  cursor: pointer;
+}
+
+
+
+.weather-icon {
+  display: block;
+  margin: 0 auto 8px;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 600px) {
+  nav {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .search-container {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #searchInput,
+  #searchBtn {
+    width: 100%;
+    border-radius: 10px;
+    margin: 0;
+    font-size: 1.1rem;
+    height: 50px; /* вища кнопка/поле для сенсорного вводу */
+  }
+
+  .nav-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    margin-right: 0;
+  }
+
+  .nav-buttons .nav-btn {
+    width: 100%;
+    font-size: 1.2rem; /* більший шрифт для сенсорного вводу */
+    height: 50px;
+  }
+
+  .current-weather {
+    padding: 1rem;
+    height: auto;
+  }
+
+  .weather-info p {
+    font-size: 1rem;
+  }
+
+  .hour-block {
+    min-width: 80px;
+    font-size: 0.95rem;
+  }
+
+  .forecast-day-block {
+    min-height: auto;
+    padding: 12px;
+    width: 100%;
+  }
+}
